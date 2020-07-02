@@ -1,0 +1,260 @@
+import json
+import shutil
+import time
+
+
+''' fuction to read file and turn the key inside json to intger and keep value as string '''
+def readfile():
+    people = json.load(open("assessment.txt"))
+    people = {int(k):v for k,v in people.items()}
+    return people 
+
+
+
+def addemployee(people):
+    emp_id = len(people) + 1
+    people[emp_id] = {}
+    people[emp_id]['first name'] = input("first Name: ")
+    people[emp_id]['second name']= input("second name: ")
+    people[emp_id]['first line'] = input("House no & street name: ")
+    people[emp_id]['second line'] = input("city: ")
+    people[emp_id]['post code'] = input("post code: ")
+    people[emp_id]['contact no'] = input("mobile or landline: ")
+    people[emp_id]['status'] = "ok"
+    print(emp_id)
+    print("the information of", people[emp_id]['first name'] , "is stored with the ID", emp_id)
+    with open("assessment.txt", 'w') as file:
+         file.write(json.dumps(people))
+         file.close()
+def deletemployee(people):
+    x = input("Please enter the ID of the employee that you want delete it:\n")
+    le = len(people) + 1
+    if x.isdigit():
+        x = int(x)
+        if x in people:
+            for i in range (1, le):
+                if x == i:
+                    status = people[x]['status']
+                    if status != "null":
+                        people[x]['first name'] = ""
+                        people[x]['second name'] = ""
+                        people[x]['first line'] = ""
+                        people[x]['second line'] = ""
+                        people[x]['post code'] = ""
+                        people[x]['contact no'] = ""
+                        people[x]['status'] = "null"
+                        with open("assessment.txt", 'w') as file:
+                            file.write(json.dumps(people))
+                            file.close()
+                        print("The entry with the ID", x, "has been deleted")
+                    elif status == "null":
+                        print("The entry with the ID", x, "is already deleted")
+                    else:
+                        print("Something is going wrong m!")
+    else:
+        print("the ID must be a number")
+def employeedetail(people):
+    x = input("Please enter the ID of the employee:\n")
+    le = len(people) + 1
+    if x.isdigit():
+        x = int(x)
+        if x in people:
+            for i in range (1, le):
+                if x == i:
+                    status = people[x]['status']
+                    if status == "ok":
+                        print("first Name\t", people[x]['first name'], "\nsecond name\t" ,people[x]['second name'],"\nFirst line\t", people[x]['first line'],"\nSecond line\t",people[x]['second line']," \nPost code\t",people[x]['post code']," \nContact no\t",people[x]['contact no'], "\nStatus: \t", people[x]['status'], "\nID: \t", x,"\n\n\n")
+                    elif status == "null":
+                        print("The entry with the ID", x, "is deleted")
+                    else:
+                        print("Something is going wrong!")
+        else:        
+            print("the ID", x, "is not found")
+
+    else:
+        print("the ID must be a number")
+def printtable(people):
+    le = len(people) + 1
+    print("first Name|          \tsecond name|          \tfirst line|       \tsecond line|      \tpost code|\tcontact no| \tStatus|\tID")
+    for i in range (1, le):
+        if people[i]['status'] == "ok":
+            spacename = 20 - len(people[i]['first name'])            
+            print(people[i]['first name'],spacename * " ","\t",people[i]['second name'],9 * " ","\t", people[i]['first line'],6 * " ","\t", people[i]['second line'],4 * "  ","\t", people[i]['post code'],"\t", people[i]['contact no'],"\t",people[i]['status']," \t", i)
+            print("------------------------------------------------------------------------------------------------------------------------------------------------------")
+def backup():
+    shutil.copy("assessment.txt", "copyassessment.txt")
+
+def searchfield(people):
+    while True:
+        print("option")
+        print("f-  by firstname")
+        print("s- secondname")
+        print("l- firstline")
+        print("d- second line")
+        print("p- postcode")
+        print("m- contact no")
+        print("e- exit")
+        option = input("option: ")
+        if option == 'f' :
+            first = input("Please enter the first name:\n")
+            le = len(people) + 1
+            if any(first in b.get('first name', []) for a, b in people.items()):
+                for i in range (1, le):
+                     if first == people[i]['first name']:
+                        print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+            else:
+                print("Not found")
+        elif option == 's' :
+             second = input("Please enter the second name:\n")
+             le = len(people) + 1
+             if any(second in b.get('second name', []) for a, b in people.items()):
+                for i in range (1, le):
+                     if second == people[i]['second name']:
+                        print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+             else:
+                print("Not found")
+        elif option == 'l' :
+             fline = input("Please enter the first line:\n")
+             le = len(people) + 1
+             if any(fline in b.get('first line', []) for a, b in people.items()):
+                for i in range (1, le):
+                     if fline == people[i]['first line']:
+                        print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+             else:
+                print("Not found")
+        elif option == 'd' :
+             sline = input("Please enter the second line:\n")
+             le = len(people) + 1
+             if any(sline in b.get('second line', []) for a, b in people.items()):
+                for i in range (1, le):
+                     if sline == people[i]['second line']:
+                        print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+             else:
+                print("Not found")
+        elif option == 'p' :         
+             post = input("Please enter the  post code:\n")
+             le = len(people) + 1
+             if any(post in b.get('post code', []) for a, b in people.items()):
+                for i in range (1, le):
+                     if post == people[i]['post code']:
+                        print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+             else:
+                print("Not found")
+        elif option == 'm' :          
+             mobile = input("Please enter the contact no:\n")
+             le = len(people) + 1
+             if any(mobile in b.get('contact no', []) for a, b in people.items()):
+                for i in range (1, le):
+                     if mobile == people[i]['contact no']:
+                        print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+             else:
+                print("Not found")
+        elif   option == 'e' :
+               print("GOOD Bye")
+               time.sleep(1)
+               exit(0)
+def updateemployee(people):
+    x = input("please enter the id for employee that you want to update: " )
+    le = len(people) + 1
+    if x.isdigit():
+       x = int(x)
+       if x in people:
+            for i in range (1, le):
+                if x == i:
+                    status = people[x]['status']
+                    if status == "ok":
+                        while True:
+                            print("option")
+                            print("f- firstname")
+                            print("s- secondname")
+                            print("l- firstline")
+                            print("d- second line")
+                            print("p- postcode")
+                            print("m- contact no")
+                            print("e- exit")
+                            option = input("option: ")
+                            if option == 'f' :
+                                print("the current first name of the id",i,"is",people[i]['first name'])
+                                newfname = input("please enter the new first name")
+                                people[i]['first name'] = newfname
+                                print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+                            if option == 's' :
+                                print("the current second name of the id",i,"is",people[i]['second name'])
+                                newsname = input("please enter the new second name")
+                                people[i]['second name'] = newsname
+                                print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+                            if option == 'l' :
+                                print("the current first line of the id",i,"is",people[i]['first line'])
+                                newfline = input("please enter the new first line")
+                                people[i]['first line'] = newfline
+                                print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+                            if option == 'd' :
+                                print("the current second line of the id",i,"is",people[i]['second line'])
+                                newsline = input("please enter the new first name")
+                                people[i]['second line'] = newsline
+                                print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+                            if option == 'p' :
+                                print("the current post code of the id",i,"is",people[i]['post code'])
+                                newpcode = input("please enter the new post code")
+                                people[i]['post code'] = newpcode
+                                print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+                            if option == 'm' :
+                                print("the current contact number of the id",i,"is",people[i]['contact no'])
+                                newmob = input("please enter the new contact no")
+                                people[i]['contact no'] = newmob
+                                print("first Name\t", people[i]['first name'], "\nsecond name\t" ,people[i]['second name'],"\nFirst line\t", people[i]['first line'],"\nSecond line\t",people[i]['second line']," \nPost code\t",people[i]['post code']," \nContact no\t",people[i]['contact no'], "\nStatus: \t", people[i]['status'], "\nID: \t", i,"\n\n\n")
+                            if  option == 'e' :
+                                print("GOOD Bye")
+                                with open("assessment.txt", 'w') as file:
+                                    file.write(json.dumps(people))
+                                    file.close() 
+                                time.sleep(1)
+                                exit(0)
+                    elif status == "null":
+                        print("The entry with the ID", x, "is deleted")
+                    else:
+                        print("Something is going wrong!")
+       else:        
+                        print("the ID", x, "is not found")
+     
+   
+    else:
+        print("the ID must be a number") 
+            
+
+
+while True:
+    test = readfile()
+    print("options")
+    print("pt- Read table")
+    print("a-  Add employee")
+    print("d-  delet employee")
+    print("u-  emploee detail")
+    print("b-  back up")
+    print("s-  search by")
+    print("r- update existe employee")
+    print("e - Exit")
+    print("Menu")
+    option = input("Option: ")
+    if option == 'pt'  :
+        printtable(test)
+    elif option =='a'  :
+        addemployee(test)
+    elif option == 'd'  :
+        deletemployee(test)
+    elif option == 'u' :
+        employeedetail(test)
+    elif option == 'b' :
+        backup()
+    elif option == 's' :
+        searchfield(test)
+    elif option == 'r':
+        updateemployee(test)
+    elif option == 'e' :
+        print("GOOD Bye")
+        time.sleep(1)
+        exit(0)
+    else:
+        print("enter a valid option")
+
+    
